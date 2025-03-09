@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="icon" href="/images/favicon.png" />
+    <title>여행 상품 수정</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tour-add.css">
+    <link rel="stylesheet" href="/css/category-check-box.css">
+    <link rel="stylesheet" href="/css/guide-list.css">
+    <link rel="stylesheet" href="/css/img-delete-button.css">
+    <link rel="stylesheet" href="/css/preview-img.css">
+    <style>
+        #previewContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        #previewContainer img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 추가 -->
+<div class="header-area">
+    <div th:replace="~{fragments/header-noSearch :: header}"></div>
+</div>
+<div class="container">
+    <!-- 왼쪽 메뉴 -->
+    <div class="sidebar">
+        <button class="menu-button active" data-tab="intro" onclick="showTab('intro')">상품 소개</button>
+        <button class="menu-button" data-tab="info" onclick="showTab('info')">필수 정보</button>
+        <button class="menu-button" data-tab="photo" onclick="showTab('photo')">상품 사진</button>
+    </div>
+
+    <!-- 오른쪽 내용 -->
+    <div class="content">
+        <form id="tourItemForm">
+            <!-- 상품 소개 -->
+            <div id="intro" class="tab active-tab">
+                <h2>상품 소개</h2>
+
+                <label for="tourName">여행 상품명</label>
+                <input type="text" id="tourName" name="tourName" required>
+
+                <label for="tourDesc">여행 설명</label>
+                <textarea id="tourDesc" name="tourDesc" rows="4" required></textarea>
+            </div>
+
+            <!-- 필수 정보 -->
+            <div id="info" class="tab">
+                <h2>필수 정보</h2>
+                <label for="tourPeriod">여행 기간</label>
+                <select id="tourPeriod" name="tourPeriod"></select>
+
+                <label for="tourRegion">여행 지역</label>
+                <select id="tourRegion" name="tourRegion"></select>
+
+                <label for="maximum">최대 인원수</label>
+                <input type="number" id="maximum" name="maximum" required>
+
+                <label for="tourPrice">여행 가격</label>
+                <input type="number" id="tourPrice" name="tourPrice" required>
+
+                <!-- 선택된 가이드 표시 영역 -->
+                <div id="selectedGuidesContainer">
+                    <h4>선택된 가이드</h4>
+                    <p id="selectedGuidesText">선택된 가이드가 없습니다.</p>
+                </div>
+
+                <div class="dropdown">
+                    <label for="guideSelect">가이드 선택</label>
+                    <select id="guideSelect" name="guides" multiple>
+                        <!-- 서버에서 동적으로 옵션 추가 -->
+                    </select>
+                </div>
+
+                <label for="categoryCheckBox">테마 선택</label>
+                <p>* 최대 3개 선택 가능</p>
+                <div id="categoryCheckBox">
+                </div>
+            </div>
+
+            <!-- 상품 사진 -->
+            <div id="photo" class="tab">
+                <h2>상품 사진</h2>
+                <label>이미지 업로드</label><br>
+                <input type="file" name="images" id="tourImages" accept="image/*" multiple>
+                <p>* 최대 5장 업로드 가능</p>
+                <p>* 가장 처음 등록된 사진을 썸네일로 사용</p>
+                <!-- 미리보기 영역 -->
+                <div id="previewContainer"></div>
+            </div>
+
+            <!-- 버튼 -->
+            <button type="button" id="submitBtn">수정</button>
+            <button type="button" id="activeBtn"></button>
+            <a href="/item/manage">상품 관리로 이동</a> <!-- 추후 상품 관리 페이지 생성 시 연결 -->
+        </form>
+    </div>
+</div>
+<div class="footer-area">
+    <div th:replace="~{fragments/footer.html::footer}"></div>
+</div>
+<script src="/js/item/getCategory.js"></script>
+<script src="/js/item/limitCheckBox.js"></script>
+<script src="/js/item/getGuideByCompany.js"></script>
+<script src="/js/item/getTourDetail.js"></script>
+<script src="/js/item/updateValidationFormData.js"></script>
+<script src="/js/item/showTabs.js"></script>
+<script src="/js/item/updateTourItem.js"></script>
+<script src="/js/item/changeActive.js"></script>
+<script src="/js/item/filteringList.js"></script>
+</body>
+</html>

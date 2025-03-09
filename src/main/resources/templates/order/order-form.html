@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 페이지</title>
+    <link rel="icon" href="/images/favicon.png" />
+    <link rel="stylesheet" href="/css/order-form.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+<div class="header-area">
+    <div th:replace="~{fragments/header-noSearch::header}"></div>
+</div>
+<div class="custom-container">
+    <a onclick="history.back()" class="back-button">←</a>
+    <form th:action="@{/api/orders}" method="post" th:object="${addOrderRequest}" id="order-form">
+        <div class="section" th:each="request : ${addOrderRequest.orderRequests}">
+
+            <input type="hidden" th:field="*{orderRequests[__${requestStat.index}__].price}">
+            <input type="hidden" th:field="*{orderRequests[__${requestStat.index}__].itemId}">
+            <input type="hidden" th:field="*{orderRequests[__${requestStat.index}__].count}">
+            <input type="hidden" th:field="*{orderRequests[__${requestStat.index}__].guideId}">
+            <input type="hidden" th:field="*{orderRequests[__${requestStat.index}__].startDate}">
+            <input type="hidden" th:field="*{orderRequests[__${requestStat.index}__].endDate}">
+
+            <h2 class="text-start item-title" th:text="${request.name}">투어 제목</h2>
+            <div class="text-start mt-3 mb-3">
+                <p>날짜:
+                    <span th:text="${#temporals.format(request.startDate, 'yyyy년 MM월 dd일')}">시작일</span> ~
+                    <span th:text="${#temporals.format(request.endDate, 'yyyy년 MM월 dd일')}">종료일</span>
+                </p>
+            </div>
+            <p class="text-start">인원: <span th:text="${request.count} + '명'">2명</span></p>
+            <p class="text-start">비용:
+                <span th:text="${#numbers.formatInteger(request.price * request.count, 3, 'COMMA')} + '원'">100원</span>
+            </p>
+
+            <!-- 예약자 정보 -->
+            <div class="input-field">
+                <label th:for="${#ids.next('item')}">이름</label>
+                <input type="text" th:field="*{orderRequests[__${requestStat.index}__].bookerName}"
+                       placeholder="이름을 입력해주세요" required/>
+            </div>
+            <div class="input-field">
+                <label th:for="${#ids.next('phoneNumber')}">연락처</label>
+                <input type="text" th:field="*{orderRequests[__${requestStat.index}__].phoneNumber}"
+                       placeholder="연락처를 입력해주세요" required/>
+            </div>
+            <div class="input-field">
+                <label th:for="${#ids.next('orderMessage')}">예약 메시지</label>
+                <textarea th:field="*{orderRequests[__${requestStat.index}__].orderMessage}"
+                          placeholder="특이사항이나 요구사항을 적어주세요."></textarea>
+            </div>
+        </div>
+
+        <!-- 약관 동의 -->
+        <div id="policy">
+            <h5>약관동의</h5>
+            <input type="checkbox" id="check1"/>
+            <label for="check1">여담 여행자 약관에 동의합니다.</label> <br/>
+            <input type="checkbox" id="check2"/>
+            <label for="check2">여담 개인정보 처리 방침에 동의합니다.</label>
+        </div>
+    </form>
+    <button id="submit-btn" onclick="submitOrder()">결제하기</button>
+</div>
+<!-- jQuery -->
+<script
+        type="text/javascript"
+        src="https://code.jquery.com/jquery-1.12.4.min.js"
+></script>
+
+<!-- iamport.payment.js -->
+<script
+        type="text/javascript"
+        src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
+></script>
+<script src="/js/order/order.js"></script>
+<script src="/js/payment/payment.js"></script>
+</body>
+</html>

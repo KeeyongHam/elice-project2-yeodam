@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" href="/images/favicon.png" />
+    <title>로그인</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100">
+    <div class="text-center">
+        <div class="mb-4">
+            <a th:href="@{/}"><img th:src="@{/images/logo.png}" alt="로고" width="446" height="129"></a>
+        </div>
+
+        <div th:if="${errorMessage != null}" class="alert alert-danger" role="alert">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <div class="login-container mb-4">
+            <form th:action="@{/login}" method="post">
+                <!-- 장바구니 redirectUrl용-->
+                <input type="hidden" name="redirectUrl" th:value="${param.redirectUrl}" />
+
+                <div class="mb-4">
+                    <input type="email" class="form-control" name="email" placeholder="이메일을 입력하세요" required />
+                </div>
+                <div class="mb-4">
+                    <input type="password" class="form-control" name="password" placeholder="비밀번호를 입력하세요" required />
+                </div>
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="remember-me">
+                        Remember me
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-lg btn-block btn-primary w-100">로그인</button>
+            </form>
+        </div>
+
+        <div class="text-muted mt-5 mb-3">
+            <span>계정이 없으신가요?</span>
+            <a href="/join" class="text-decoration-none mx-2">회원가입</a>
+        </div>
+
+    </div>
+    <script> //로그인 시도 플래그 설정
+        document.querySelector('form').addEventListener('submit', async function(e) {
+            localStorage.setItem('syncCartAfterLogin', 'true');
+        });
+    </script>
+</body>
+</html>
